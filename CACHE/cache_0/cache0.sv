@@ -1,50 +1,18 @@
-// =============================================================================
-// cache_2way_baseline.sv
-// VERSION 1 -- BASELINE (frozen spec, pre-low-power)
-// "Simplified ARM-inspired 32-bit, byte-addressable, 2-way set-associative
-//  cache" -- NOT a claim of matching any specific ARM core's real cache.
+// 
+// cache_0.sv
+// VERSION 1  BASELINE (frozen spec, pre-low-power)
 //
-// Read-only, 2-way set-associative, flip-flop based cache. Hard-coded to
-// the frozen geometry below (no parameters) to keep the RTL simple for
-// the synthesis/power baseline. This is the design that later gets
-// modified into the low-power variant.
+// Read-only, 2-way set-associative. Hard-coded parameters
 //
-// Specification (frozen):
-//   CPU address width   : 32 bits, byte-addressable
-//   Cache capacity       : 256 bytes
-//   Cache line size        : 32 bytes (8 x 32-bit words)
-//   Associativity            : 2-way set associative
-//   Total lines                : 8   |  Number of sets : 4  |  Ways/set : 2
-//   Byte offset : 2 bits  |  Word offset : 3 bits  |  Index : 2 bits  |  Tag : 25 bits
-//   Data storage : 2 x 4 x 256 = 2048 bits   (== 256 B, matches capacity)
-//   Tag storage  : 2 x 4 x 25  =  200 bits
-//   Valid bits   : 8
-//   CPU data bus  : 32 bits, with a byte/word select (req_size)
-//   Replacement policy : 1-bit LRU per set
-//   Dirty bit / write support / prefetch / ECC : none
-//   Multiple outstanding misses : no -- one miss at a time
-//   Memory interface : simple request/response, whole-line fill
-//   Clock : single synchronous clock   |   Reset : active-low
-//
-// Address format:
-//   [31:7] TAG (25b)  [6:5] INDEX (2b)  [4:2] WORD OFFSET (3b)  [1:0] BYTE OFFSET (2b)
-//
-// req_size selects the CPU access granularity:
-//   req_size = 1 -> word access  : rd_data = the selected 32-bit word
-//   req_size = 0 -> byte access  : rd_data = selected byte in rd_data[7:0],
-//                                   rd_data[31:8] zero-padded
-//
-// Explicitly OUT of scope here (left for the low-power variant): write
-// ops, dirty bits, write-back/write-through, prefetch, ECC, coherence,
-// banking, power gating, clock gating, operand isolation, way
-// prediction, DVFS, SRAM.
-// =============================================================================
+// In Genus , Lib cells of the corresp mem has to be not used.
+// set_dont_use [get_lib_cells SRAM_4x256] true
+
 
 module cache_2way_baseline (
     input  logic clk,
     input  logic rst_n,
 
-    // ---------------- CPU-side read interface ----------------
+    //  CPU-side read interface 
     input  logic          req_valid,
     input  logic [31:0]   req_addr,
     input  logic          req_size,    // 1 = word access, 0 = byte access
@@ -53,7 +21,7 @@ module cache_2way_baseline (
     output logic          hit,         // 1 = served from cache (same cycle as resp_valid on a hit)
     output logic [31:0]   rd_data,
 
-    // ---------------- Memory-side line-fill interface ----------------
+    //  Memory-side line-fill interface 
     output logic          mem_req_valid,
     output logic [31:0]   mem_req_addr,   // address of missing line (offset bits = 0)
     input  logic          mem_req_ready,
@@ -61,25 +29,22 @@ module cache_2way_baseline (
     input  logic [255:0]  mem_resp_data   // whole 32-byte line, one shot
 );
 
-  // ---------------------------------------------------------------------
   // Storage arrays (2 ways x 4 sets), pure flip-flops
-  // ---------------------------------------------------------------------
+
   logic         valid_arr [1:0][3:0];
   logic [24:0]  tag_arr   [1:0][3:0];
   logic [255:0] data_arr  [1:0][3:0];      // 32-byte line per entry
   logic         lru_arr   [3:0];           // lru_arr[set] = way number that is LRU
 
-  // ---------------------------------------------------------------------
   // Address decode: [31:7] tag, [6:5] index, [4:2] word offset, [1:0] byte offset
-  // ---------------------------------------------------------------------
+  
   wire [24:0] req_tag      = req_addr[31:7];
   wire [1:0]  req_index    = req_addr[6:5];
   wire [2:0]  req_word_off = req_addr[4:2];
   wire [1:0]  req_byte_off = req_addr[1:0];
 
-  // ---------------------------------------------------------------------
   // Combinational hit detection
-  // ---------------------------------------------------------------------
+
   wire way0_hit = valid_arr[0][req_index] && (tag_arr[0][req_index] == req_tag);
   wire way1_hit = valid_arr[1][req_index] && (tag_arr[1][req_index] == req_tag);
   wire lookup_hit = way0_hit | way1_hit;
