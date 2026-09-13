@@ -3,7 +3,7 @@
 
 A small **32-bit, byte-addressable, read-only, 2-way set-associative cache** implemented entirely using **flip-flops**.
 
-This project is the **Version 1 — Baseline (Pre-Low-Power)** implementation. The baseline is intentionally kept simple so that it can later be compared against a low-power optimized version.
+This project is the **Version 1  Baseline (Pre-Low-Power)** implementation. The baseline is intentionally kept simple so that it can later be compared against a low-power optimized version.
 
 ---
 
@@ -58,7 +58,7 @@ The cache does **not** use SRAM macros. All cache data and metadata are implemen
 | Memory refill      | Complete 32-byte line    |
 | Write support      | None                     |
 
----
+
 
 # 3. Cache Geometry
 
