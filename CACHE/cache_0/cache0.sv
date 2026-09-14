@@ -201,6 +201,8 @@ module cache_2way_baseline (
         miss_byte_off_q <= req_byte_off;         // Save byte offset
         miss_size_q     <= req_size;             // Save byte/word request
       end
+    //since it takes several cycles if missed to finally feed CPU data, the req addr info are stored by the cache
+
 
       if (fill_wr_en)
         valid_arr[victim_way_q][miss_index_q] <= 1'b1;  // Set valid bit
