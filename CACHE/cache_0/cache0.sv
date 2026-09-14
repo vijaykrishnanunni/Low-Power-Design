@@ -112,7 +112,7 @@ module cache_2way_baseline (
       IDLE: begin
         req_ready = 1'b1;                       // Cache can accept request
 
-        if (req_valid) begin
+          if (req_valid) begin                  // CPU req data
 
           if (lookup_hit) begin
             resp_valid = 1'b1;                  // Hit response valid
@@ -140,9 +140,9 @@ module cache_2way_baseline (
           state_n = MISS_WAIT;                  // Memory accepted request
       end
 
-      MISS_WAIT: begin
-
-        if (mem_resp_valid)
+      MISS_WAIT: begin                          // Wait till the mem sends the data
+        
+          if (mem_resp_valid)
           state_n = FILL;                       // Memory returned cache line
 
       end
