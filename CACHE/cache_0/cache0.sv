@@ -34,7 +34,7 @@ module cache_2way_baseline (
   logic [255:0] data_arr  [1:0][3:0];
   logic        lru_arr   [3:0];
 
-  // Address fields: tag [31:7], index [6:5], word offset [4:2], byte offset [1:0]
+   // Address fields: tag [31:7], index [6:5], word offset [4:2], byte offset [1:0] 
   wire [24:0] req_tag      = req_addr[31:7];
   wire [1:0]  req_index    = req_addr[6:5];
   wire [2:0]  req_word_off = req_addr[4:2];
