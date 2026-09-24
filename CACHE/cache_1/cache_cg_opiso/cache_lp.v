@@ -17,6 +17,10 @@
 // 1. req_addr
 // 2. req_size
 //
+// FIX: outputs assigned inside always @(*) are now declared
+//      "output reg" (req_ready, resp_valid, hit, rd_data,
+//      mem_req_valid, mem_req_addr).
+//
 
 module cache_2way_clock_gated_oi (
     input         clk,
@@ -26,14 +30,14 @@ module cache_2way_clock_gated_oi (
     input         req_valid,
     input  [31:0] req_addr,
     input         req_size,       // 1 = word, 0 = byte
-    output        req_ready,
-    output        resp_valid,
-    output        hit,
-    output [31:0] rd_data,
+    output reg    req_ready,
+    output reg    resp_valid,
+    output reg    hit,
+    output reg [31:0] rd_data,
 
     // Memory-side line-fill interface
-    output        mem_req_valid,
-    output [31:0] mem_req_addr,
+    output reg    mem_req_valid,
+    output reg [31:0] mem_req_addr,
     input         mem_req_ready,
     input         mem_resp_valid,
     input  [255:0] mem_resp_data
