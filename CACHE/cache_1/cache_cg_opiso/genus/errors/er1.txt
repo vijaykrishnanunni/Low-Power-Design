@@ -1,0 +1,250 @@
+
+
+
+Loading tool scripts...
+Finished loading tool scripts (10 seconds elapsed).
+
+#@ Processing -files option
+@genus 1> source run.tcl
+#@ Begin verbose source ./run.tcl
+@file(run.tcl) 15: set DESIGN_DIR "/home/user1/lp"
+@file(run.tcl) 30: set_db init_lib_search_path $DESIGN_DIR
+  Setting attribute of root '/': 'init_lib_search_path' = /home/user1/lp
+@file(run.tcl) 32: set_db library {
+    sky130_fd_sc_hd__tt_025C_1v80.lib
+    sky130_fd_sc_hd__ff_100C_1v65.lib
+    sky130_fd_sc_hd__ss_100C_1v60.lib
+}
+
+Threads Configured:8
+
+  Message Summary for Library all 3 libraries:
+  ********************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 1
+  An unsupported construct was detected in this library. [LBR-40]: 36
+  ********************************************
+ 
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'sky130_fd_sc_hd__tt_025C_1v80' and 'sky130_fd_sc_hd__ff_100C_1v65'.
+        : This is a common source of delay calculation confusion and should be avoided.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'sky130_fd_sc_hd__tt_025C_1v80' and 'sky130_fd_sc_hd__ss_100C_1v60'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.800000, 25.000000) in library 'sky130_fd_sc_hd__tt_025C_1v80.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.650000, 100.000000) in library 'sky130_fd_sc_hd__ff_100C_1v65.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.600000, 100.000000) in library 'sky130_fd_sc_hd__ss_100C_1v60.lib'.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_12' must have an output pin.
+        : Add the missing output pin(s), then reload the library. Else the library cell will be marked as timing model i.e. unusable. Timing_model means that the cell does not have any defined function. If there is no output pin, Genus will mark library cell as unusable i.e. the attribute 'usable' will be marked to 'false' on the libcell. Therefore, the cell is not used for mapping and it will not be picked up from the library for synthesis. If you query the attribute 'unusable_reason' on the libcell; result will be: 'Library cell has no output pins.'Note: The message LBR-9 is only for the logical pins and not for the power_ground pins. Genus will depend upon the output function defined in the pin group (output pin) of the cell, to use it for mapping. The pg_pin will not have any function defined.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_12' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_3' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_3' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_4' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_4' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_6' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_6' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_8' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__decap_8' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__diode_2' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__diode_2' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_bleeder_1' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_bleeder_1' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_decapkapwr_12' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_decapkapwr_12' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_decapkapwr_3' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_decapkapwr_3' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_decapkapwr_4' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'sky130_fd_sc_hd__lpflow_decapkapwr_4' must have an output pin.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-9'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'sky130_fd_sc_hd__tt_025C_1v80/AMUX2_3V'.
+        : Specify a valid area value for the libcell.
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a2111o_1 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111o_1).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111o_1).
+        : Library cell names must be unique.  Any duplicates will be deleted.  Only the first (as determined by the order of libraries) will be retained.
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a2111o_2 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111o_2).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111o_2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a2111o_4 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111o_4).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111o_4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a2111oi_0 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_0).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_0).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a2111oi_1 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_1).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a2111oi_2 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_2).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a2111oi_4 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_4).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a2111oi_4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a211o_1 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211o_1).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211o_1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a211o_2 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211o_2).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211o_2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a211o_4 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211o_4).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211o_4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a211oi_1 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211oi_1).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211oi_1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a211oi_2 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211oi_2).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211oi_2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a211oi_4 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211oi_4).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a211oi_4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a21bo_1 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21bo_1).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21bo_1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a21bo_2 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21bo_2).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21bo_2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a21bo_4 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21bo_4).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21bo_4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a21boi_0 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_0).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_0).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a21boi_1 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_1).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a21boi_2 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_2).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__a21boi_4 and sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_4).  Deleting (sky130_fd_sc_hd__ff_100C_1v65/sky130_fd_sc_hd__a21boi_4).
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-22'.
+  Setting attribute of root '/': 'library' = 
+    sky130_fd_sc_hd__tt_025C_1v80.lib
+    sky130_fd_sc_hd__ff_100C_1v65.lib
+    sky130_fd_sc_hd__ss_100C_1v60.lib
+
+@file(run.tcl) 43: read_hdl -sv "$DESIGN_DIR/src.v"
+@file(run.tcl) 50: elaborate cache_2way_clock_gated_oi
+  Libraries have 0 usable logic and 0 usable sequential lib-cells.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Huge' is non-monotonic.
+        : Non-monotonic wireload models can cause problems during synthesis and/or mapping.  Raising some of the points in the curve to give it a monotonic shape.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Huge' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Huge' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Large' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Large' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Large' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Medium' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Medium' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Medium' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Small' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Small' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Small' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Huge' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Huge' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Huge' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Large' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Large' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Large' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Medium' is non-monotonic.
+Warning : Non-monotonic wireload model found. [LBR-81]
+        : 'Length' table in wireload model 'Medium' is non-monotonic.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-81'.
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'cache_2way_clock_gated_oi' from file '/home/user1/lp/src.v'.
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'cache_2way_clock_gated_oi' in file '/home/user1/lp/src.v' on line 268.
+Info    : Done Elaborating Design. [ELAB-3]
+        : Done elaborating 'cache_2way_clock_gated_oi'.
+Checking for analog nets...
+Check completed for analog nets.
+Checking for source RTL...
+Check completed for source RTL.
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+
+Stage: post_elab
+--------------------------------------------------------
+| Trick             | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------------------
+| ume_constant_bmux |       0 |       0 |         0.00 | 
+--------------------------------------------------------
+Starting clip mux common data inputs [v1.0] (stage: post_elab, startdef: cache_2way_clock_gated_oi, recur: true)
+Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.000s)
+Starting clip the non-user hierarchies [v2.0] (stage: post_elab, startdef: cache_2way_clock_gated_oi, recur: true)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.000s)
+
+Stage: post_elab
+---------------------------------------------------------
+| Transform          | Accepts | Rejects | Runtime (ms) | 
+---------------------------------------------------------
+| hlo_clip_mux_input |       0 |       0 |         0.00 | 
+| hlo_clip           |       0 |       0 |         0.00 | 
+---------------------------------------------------------
+UM:   flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   elaborate
+@file(run.tcl) 71: read_power_intent -1801 "$DESIGN_DIR/upf.upf"
+
+[19:08:04.472441] Periodic Lic check successful
+[19:08:04.472457] Feature usage summary:
+[19:08:04.472457] Genus_Synthesis
+[19:08:04.472458] Genus_Low_Power_Opt
+Checking out license: Genus_Low_Power_Opt
+Started reading power intent file(s) '/home/user1/lp/upf.upf'...
+================================================================
+Checking file(s) '/home/user1/lp/upf.upf' with 1801 linter (version: 21.20-a216 dated:01.25.2022).
+Completed lint check of files (runtime 0.00).
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_OPT8: Missing mandatory option: -domain. ('map_isolation_cell':'/home/user1/lp/upf.upf':'162')
+        : Fix the error and read the 1801 power intent file again. For more information on the syntax of commands, refer to the 1801 command reference.
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_OPT1: Unknown option used: 'power == `{FULL_ON, 1.8} && ground == `{FULL_ON, 0.0}'. ('add_power_state':'/home/user1/lp/upf.upf':'234')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_OPT1: Unknown option used: 'power == `{FULL_ON, 1.2} && ground == `{FULL_ON, 0.0}'. ('add_power_state':'/home/user1/lp/upf.upf':'239')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_OPT1: Unknown option used: 'power == `{OFF}'. ('add_power_state':'/home/user1/lp/upf.upf':'243')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_OPT1: Unknown option used: 'power == `{FULL_ON, 1.2} && ground == `{FULL_ON, 0.0}'. ('add_power_state':'/home/user1/lp/upf.upf':'248')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_REF1: Object cannot be found: Supply net or port 'SS_AON' has not been previously created. ('create_pst':'/home/user1/lp/upf.upf':'275')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_REF1: Object cannot be found: Supply net or port 'SS_CACHE' has not been previously created. ('create_pst':'/home/user1/lp/upf.upf':'275')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_REF1: Object cannot be found: Supply net or port 'SS_RET' has not been previously created. ('create_pst':'/home/user1/lp/upf.upf':'275')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_REF1: Object cannot be found: Power state table 'CACHE_PST'. ('add_pst_state':'/home/user1/lp/upf.upf':'279')
+Error   : 1801 linter detected error in 1801 file. [1801-98] [read_power_intent]
+        : 1801_LINT_REF1: Object cannot be found: Power state table 'CACHE_PST'. ('add_pst_state':'/home/user1/lp/upf.upf':'284')
+#@ End verbose source ./run.tcl
+lint errors in power intent
+Encountered problems processing file: run.tcl
+WARNING: This version of the tool is 1165 days old.
+@genus:root: 2> 
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 85s, ST: 14s, FG: 14s, CPU: 7.7%}, MEM {curr: 1.3G, peak: 1.7G, phys curr: 0.5G, phys peak: 0.5G}, SYS {load: 0.0, cpu: 8, total: 31.0G, free: 2.4G}
