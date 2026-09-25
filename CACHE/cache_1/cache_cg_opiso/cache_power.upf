@@ -1,30 +1,122 @@
-upf_version 3.1
+# ============================================================
+# UPF - LOW POWER INTENT
+# ============================================================
+#
+# Design:
+#     cache_2way_clock_gated_oi
+#
+# Main low-power concepts:
+#     1. Power domain
+#     2. Isolation
+#     3. Retention intent
+#     4. Power-state definition
+#     5. Power-state table
+#
+# Supply voltages:
+#
+#     AON domain       : 1.8 V
+#     CACHE domain     : 1.2 V
+#     RETENTION supply : 1.2 V
+#     GND              : 0 V
+#
+#
+# IMPORTANT SKY130 LIBRARY INFORMATION
+# ------------------------------------
+#
+# Isolation cell available:
+#
+#     sky130_fd_sc_hd__lpflow_inputiso0p_1
+#
+# This cell IS referenced/mapped in this UPF.
+#
+#
+# Level-shifter cells available:
+#
+#     sky130_fd_sc_hd__lpflow_lsbuf_lh_isowell_tap_1
+#     sky130_fd_sc_hd__lpflow_lsbuf_lh_hl_isowell_tap_1
+#
+# These are identified as candidate level-shifter cells only.
+# They are NOT mapped in this UPF because the exact directional
+# mapping syntax depends on the Genus version and characterization
+# of the supplied library.
+#
+#
+# Power-switch cell:
+#
+#     No dedicated SKY130 power-switch cell is being mapped.
+#
+# Therefore power gating is represented as UPF intent.
+#
+#
+# Retention cell:
+#
+#     No dedicated SKY130 retention cell is being mapped.
+#
+# Therefore retention is represented as UPF intent only.
+#
+# ============================================================
+
+
+# ============================================================
+# 1. TOP DESIGN
+# ============================================================
 
 set_design_top cache_2way_clock_gated_oi
 
-# ============================================================
-# 1. LOGIC CONTROL SIGNALS
-# ============================================================
-# These controls are assumed to come from always-on logic.
-
-create_logic_port cache_sleep   -direction in
-create_logic_port cache_iso     -direction in
-create_logic_port cache_save    -direction in
-create_logic_port cache_restore -direction in
-
 
 # ============================================================
-# 2. SUPPLY PORTS
+# 2. LOGIC CONTROL SIGNALS
+# ============================================================
+#
+# These signals control the low-power behavior.
+#
+# cache_sleep   : requests cache power-down
+# cache_iso     : enables output isolation
+# cache_save    : saves state before power-down
+# cache_restore : restores state after power-up
+#
 # ============================================================
 
-create_supply_port VDD_AON   -direction in
-create_supply_port VDD_CACHE -direction in
-create_supply_port VDD_RET   -direction in
-create_supply_port VSS       -direction in
+create_logic_port cache_sleep
+create_logic_port cache_iso
+create_logic_port cache_save
+create_logic_port cache_restore
 
 
 # ============================================================
-# 3. SUPPLY NETS
+# 3. SUPPLY PORTS
+# ============================================================
+#
+# These represent external power connections.
+#
+# VDD_AON   = always-on 1.8 V supply
+# VDD_CACHE = switchable cache 1.2 V supply
+# VDD_RET   = retention 1.2 V supply
+# VSS       = ground
+#
+# ============================================================
+
+create_supply_port VDD_AON
+create_supply_port VDD_CACHE
+create_supply_port VDD_RET
+create_supply_port VSS
+
+
+# ============================================================
+# 4. SUPPLY NETS
+# ============================================================
+#
+# Supply PORT:
+#     external connection
+#
+# Supply NET:
+#     internal electrical network
+#
+# Supply SET:
+#     logical grouping of power + ground supplies
+#
+# These three concepts must not be confused.
+#
 # ============================================================
 
 create_supply_net VDD_AON
@@ -33,14 +125,54 @@ create_supply_net VDD_RET
 create_supply_net VSS
 
 
-connect_supply_net VDD_AON   -ports VDD_AON
-connect_supply_net VDD_CACHE -ports VDD_CACHE
-connect_supply_net VDD_RET   -ports VDD_RET
-connect_supply_net VSS       -ports VSS
+# ============================================================
+# 5. CONNECT SUPPLY PORTS TO SUPPLY NETS
+# ============================================================
+
+connect_supply_net VDD_AON \
+    -ports {VDD_AON}
+
+connect_supply_net VDD_CACHE \
+    -ports {VDD_CACHE}
+
+connect_supply_net VDD_RET \
+    -ports {VDD_RET}
+
+connect_supply_net VSS \
+    -ports {VSS}
 
 
 # ============================================================
-# 4. SUPPLY SETS
+# 6. SUPPLY SETS
+# ============================================================
+#
+# Supply sets group the corresponding power and ground supplies.
+#
+# SS_AON:
+#
+#     power  -> VDD_AON
+#     ground -> VSS
+#
+#
+# SS_CACHE:
+#
+#     power  -> VDD_CACHE
+#     ground -> VSS
+#
+#
+# SS_RET:
+#
+#     power  -> VDD_RET
+#     ground -> VSS
+#
+#
+# NOTE:
+#
+# SS_AON is NOT the same object as VDD_AON.
+#
+#     VDD_AON = supply net
+#     SS_AON  = supply set
+#
 # ============================================================
 
 create_supply_set SS_AON \
@@ -57,7 +189,30 @@ create_supply_set SS_RET \
 
 
 # ============================================================
-# 5. CACHE POWER DOMAIN
+# 7. CACHE POWER DOMAIN
+# ============================================================
+#
+# PD_CACHE represents the switchable cache power domain.
+#
+# Primary supply:
+#
+#     SS_CACHE
+#         |
+#         +-- VDD_CACHE = 1.2 V
+#         +-- VSS       = 0 V
+#
+#
+# cache_sleep represents the logical power-gating control.
+#
+# IMPORTANT:
+#
+# The supplied SKY130 library does NOT provide a dedicated
+# power-switch cell that we are mapping here.
+#
+# Therefore this UPF describes the power-switch INTENT.
+#
+# It does NOT physically map a power-switch library cell.
+#
 # ============================================================
 
 create_power_domain PD_CACHE \
@@ -66,175 +221,357 @@ create_power_domain PD_CACHE \
 
 
 # ============================================================
-# 6. POWER SWITCH
+# 8. OUTPUT ISOLATION
 # ============================================================
 #
-# VDD_AON -> power switch -> VDD_CACHE
+# When the CACHE domain is powered down, its outputs must not
+# propagate unknown/X values into the always-on portion.
 #
-# cache_sleep = 0 : cache ON
-# cache_sleep = 1 : cache OFF
 #
-
-create_power_switch PS_CACHE \
-    -domain PD_CACHE \
-    -input_supply_port {vin VDD_AON} \
-    -output_supply_port {vout VDD_CACHE} \
-    -control_port {sleep cache_sleep} \
-    -on_state {CACHE_ON vin {!sleep}} \
-    -off_state {CACHE_OFF {sleep}}
-
-
-# Map to an actual library power-switch cell.
-# Replace with the cell available in your .lib.
-
-# map_power_switch PS_CACHE \
-#     -domain PD_CACHE \
-#     -lib_cells {YOUR_POWER_SWITCH_CELL}
-
-
+# Normal:
+#
+#     cache_iso = 0
+#
+#     CACHE logic
+#          |
+#          v
+#       output
+#
+#
+# Isolated:
+#
+#     cache_iso = 1
+#
+#     CACHE logic
+#          |
+#          v
+#      isolation
+#          |
+#          v
+#        0
+#
+#
+# The isolation cell is powered from the AON supply because it
+# must remain operational even when CACHE power is OFF.
+#
 # ============================================================
-# 7. OUTPUT ISOLATION
-# ============================================================
-#
-# When cache power is OFF:
-# cache outputs are clamped to 0.
-#
-# Outputs of your cache include:
-# req_ready
-# resp_valid
-# hit
-# rd_data
-# mem_req_valid
-# mem_req_addr
-#
 
 set_isolation ISO_CACHE_OUT \
     -domain PD_CACHE \
     -applies_to outputs \
     -clamp_value 0 \
+    -isolation_supply_set SS_AON \
     -isolation_signal cache_iso \
     -isolation_sense high \
     -location parent
 
 
-# Map to actual library isolation cells.
-# Replace with your library cell names.
+# ============================================================
+# 9. ISOLATION CELL MAPPING
+# ============================================================
+#
+# THIS IS AN ACTUAL SKY130 LIBRARY CELL REFERENCE.
+#
+# When Genus implements the logical isolation requirement
+# ISO_CACHE_OUT, this library cell is the intended physical
+# implementation:
+#
+#     sky130_fd_sc_hd__lpflow_inputiso0p_1
+#
+#
+# Conceptually:
+#
+#       CACHE domain
+#            |
+#            v
+#     +----------------+
+#     | Isolation cell |
+#     | inputiso0p_1   |
+#     +----------------+
+#            |
+#            v
+#       AON domain
+#
+#
+# This cell clamps the signal to 0 when isolation is enabled.
+#
+# ============================================================
 
-# map_isolation_cell ISO_CACHE_OUT \
-#     -domain PD_CACHE \
-#     -lib_cells {YOUR_ISO_CELL}
+map_isolation_cell ISO_CACHE_OUT \
+    -domain PD_CACHE \
+    -lib_cells {sky130_fd_sc_hd__lpflow_inputiso0p_1}
 
 
 # ============================================================
-# 8. RETENTION
+# 10. LEVEL-SHIFTER INTENT
 # ============================================================
 #
-# Retention supply remains ON while main cache supply
-# is switched OFF.
+# Voltage domains:
 #
+#     AON   = 1.8 V
+#     CACHE = 1.2 V
+#
+# Therefore signals crossing between these domains may require
+# level shifting.
+#
+#
+# ------------------------------------------------------------
+# CACHE -> AON
+# ------------------------------------------------------------
+#
+# Voltage transition:
+#
+#     1.2 V  --->  1.8 V
+#
+# This is a LOW-to-HIGH voltage-domain crossing.
+#
+# Candidate SKY130 cell:
+#
+#     sky130_fd_sc_hd__lpflow_lsbuf_lh_isowell_tap_1
+#
+#
+# IMPORTANT:
+#
+# This cell is NOT mapped in the current UPF.
+#
+# It is only documented as the candidate library cell.
+#
+#
+# ------------------------------------------------------------
+# AON -> CACHE
+# ------------------------------------------------------------
+#
+# Voltage transition:
+#
+#     1.8 V  --->  1.2 V
+#
+# This is a HIGH-to-LOW voltage-domain crossing.
+#
+# Candidate SKY130 cell:
+#
+#     sky130_fd_sc_hd__lpflow_lsbuf_lh_hl_isowell_tap_1
+#
+#
+# IMPORTANT:
+#
+# This cell is also NOT mapped in the current UPF.
+#
+# Exact level-shifter mapping syntax depends on the Genus
+# version and library characterization.
+#
+# ============================================================
+
+
+# ============================================================
+# 11. RETENTION
+# ============================================================
+#
+# Retention is required when:
+#
+#     PD_CACHE --> OFF
+#
+# while the cache state needs to be preserved.
+#
+#
+# SAVE:
+#
+#     cache_save = 1
+#
+#
+# RESTORE:
+#
+#     cache_restore = 1
+#
+#
+# Retention supply:
+#
+#     VDD_RET = 1.2 V
+#
+#
+# IMPORTANT:
+#
+# The supplied SKY130 library does not contain a dedicated
+# retention flip-flop/cell that is being mapped here.
+#
+# Therefore this command specifies RETENTION INTENT only.
+#
+# It does NOT mean a physical retention cell has been inserted.
+#
+# ============================================================
 
 set_retention RET_CACHE \
     -domain PD_CACHE \
-    -retention_power_net VDD_RET \
-    -retention_ground_net VSS
-
-
-# Save before power OFF
-# Restore after power ON
-
-set_retention_control RET_CACHE \
-    -domain PD_CACHE \
+    -retention_supply_set SS_RET \
     -save_signal {cache_save high} \
     -restore_signal {cache_restore high}
 
 
-# Map to actual retention FF cells.
-# Replace with your library retention-cell name.
-
-# map_retention_cell RET_CACHE \
-#     -domain PD_CACHE \
-#     -lib_cells {YOUR_RETENTION_FF_CELL}
-
-
 # ============================================================
-# 9. LEVEL SHIFTERS
+# 12. POWER STATES
 # ============================================================
 #
-# ONLY needed if the cache and surrounding logic operate
-# at different voltages.
+# Power states describe the electrical condition of the
+# individual supply objects.
 #
-# Example:
-# always-on domain = 1.0 V
-# cache domain     = 0.8 V
+# ------------------------------------------------------------
+# AON
+# ------------------------------------------------------------
 #
-# If both are 0.8 V, do NOT insert level shifters.
+# VDD_AON:
 #
+#     ON = 1.8 V
+#
+# ------------------------------------------------------------
+# CACHE
+# ------------------------------------------------------------
+#
+# VDD_CACHE:
+#
+#     ON  = 1.2 V
+#     OFF = supply switched OFF
+#
+# ------------------------------------------------------------
+# RETENTION
+# ------------------------------------------------------------
+#
+# VDD_RET:
+#
+#     ON = 1.2 V
+#
+# ------------------------------------------------------------
+# GROUND
+# ------------------------------------------------------------
+#
+# VSS:
+#
+#     ON = 0 V
+#
+# ============================================================
 
-# set_level_shifter LS_CACHE_OUT \
-#     -domain PD_CACHE \
-#     -applies_to outputs \
-#     -location parent
 
-# set_level_shifter LS_CACHE_IN \
-#     -domain PD_CACHE \
-#     -applies_to inputs \
-#     -location self
+add_port_state VDD_AON \
+    -state {AON_ON 1.8}
 
 
-# Map to actual library level-shifter cells.
+add_port_state VDD_CACHE \
+    -state {CACHE_ON 1.2} \
+    -state {CACHE_OFF off}
 
-# map_level_shifter_cell LS_CACHE_OUT \
-#     -domain PD_CACHE \
-#     -lib_cells {YOUR_LS_LOW_TO_HIGH_CELL}
 
-# map_level_shifter_cell LS_CACHE_IN \
-#     -domain PD_CACHE \
-#     -lib_cells {YOUR_LS_HIGH_TO_LOW_CELL}
+add_port_state VDD_RET \
+    -state {RET_ON 1.2}
+
+
+add_port_state VSS \
+    -state {VSS_ON 0.0}
 
 
 # ============================================================
-# 10. POWER STATES
+# 13. POWER STATE TABLE
 # ============================================================
-
-add_power_state PD_CACHE \
-    -state CACHE_ACTIVE \
-        -supply_expr {
-            SS_CACHE == {FULL_ON 0.8}
-        } \
-    -state CACHE_OFF \
-        -supply_expr {
-            SS_CACHE == {OFF}
-        }
-
-
-# ============================================================
-# 11. POWER STATE TABLE
+#
+# PST = Power State Table.
+#
+# It describes valid COMBINATIONS of the individual supply
+# states.
+#
+#
+# IMPORTANT:
+#
+# create_pst uses the SUPPLY NETS/PORTS:
+#
+#     VDD_AON
+#     VDD_CACHE
+#     VDD_RET
+#     VSS
+#
+# It does NOT use the supply-set names:
+#
+#     SS_AON
+#     SS_CACHE
+#     SS_RET
+#
+#
+# Supply sets are used elsewhere for power-domain and
+# retention definitions.
+#
 # ============================================================
 
 create_pst CACHE_PST \
-    -supplies {
-        VDD_AON
-        VDD_CACHE
-        VDD_RET
-        VSS
-    }
+    -supplies {VDD_AON VDD_CACHE VDD_RET VSS}
 
 
-add_pst_state CACHE_ON \
+# ============================================================
+# 14. NORMAL POWER STATE
+# ============================================================
+#
+# CACHE_NORMAL:
+#
+#     VDD_AON   = 1.8 V
+#     VDD_CACHE = 1.2 V
+#     VDD_RET   = 1.2 V
+#     VSS       = 0 V
+#
+#
+# All required supplies are ON.
+#
+# ============================================================
+
+add_pst_state CACHE_NORMAL \
     -pst CACHE_PST \
-    -state {
-        AON_ON
-        CACHE_ON
-        RET_ON
-        GND
-    }
+    -state {AON_ON CACHE_ON RET_ON VSS_ON}
 
+
+# ============================================================
+# 15. CACHE SLEEP / POWER-DOWN STATE
+# ============================================================
+#
+# CACHE_SLEEP:
+#
+#     VDD_AON   = 1.8 V
+#     VDD_CACHE = OFF
+#     VDD_RET   = 1.2 V
+#     VSS       = 0 V
+#
+#
+# The CACHE domain is powered down while the retention supply
+# remains available.
+#
+# Isolation should be enabled before the cache domain is
+# switched OFF.
+#
+# ============================================================
 
 add_pst_state CACHE_SLEEP \
     -pst CACHE_PST \
-    -state {
-        AON_ON
-        CACHE_OFF
-        RET_ON
-        GND
-    }
+    -state {AON_ON CACHE_OFF RET_ON VSS_ON}
+
+
+# ============================================================
+# END OF UPF
+# ============================================================
+#
+# ACTUAL SKY130 CELL REFERENCE:
+#
+#     sky130_fd_sc_hd__lpflow_inputiso0p_1
+#         -> mapped for cache output isolation
+#
+#
+# CANDIDATE BUT NOT MAPPED:
+#
+#     sky130_fd_sc_hd__lpflow_lsbuf_lh_isowell_tap_1
+#         -> CACHE -> AON level shifting
+#
+#     sky130_fd_sc_hd__lpflow_lsbuf_lh_hl_isowell_tap_1
+#         -> AON -> CACHE level shifting
+#
+#
+# NOT AVAILABLE / NOT MAPPED:
+#
+#     Power-switch cell
+#         -> power-switch intent only
+#
+#     Retention cell
+#         -> retention intent only
+#
+# ============================================================
