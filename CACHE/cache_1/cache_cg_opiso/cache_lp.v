@@ -6,21 +6,6 @@
 // Clock-enable style RTL for Genus ICG insertion.
 // Operand isolation added to the CPU-side lookup operands.
 //
-// Clock-gated register groups:
-// 1. FSM state
-// 2. Miss-context registers
-// 3. Memory-response register
-// 4. Cache arrays
-// 5. LRU
-//
-// Operand-isolated inputs:
-// 1. req_addr
-// 2. req_size
-//
-// FIX: outputs assigned inside always @(*) are now declared
-//      "output reg" (req_ready, resp_valid, hit, rd_data,
-//      mem_req_valid, mem_req_addr).
-//
 
 module cache_2way_clock_gated_oi (
     input         clk,
